@@ -1,2 +1,6 @@
 # Sports-Analysis-Portfolio
-Bodyweight vs. max lift
+##Scatter Plot bodyweight vs total lift
+##correlation analysis
+##Strength-to-weight ratio comparison
+
+
