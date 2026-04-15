@@ -1,41 +1,42 @@
 --Crossfit Strength Analysis
 
+--Crossfit Strength Analysis
+
 WITH base AS (
     SELECT 
         name,
         age,
-        height_cm,
-        bodyweight_kg,
-        snatch_kg,
-        deadlift_kg,
-        backsq_kg,
-        candj_kg,
+        height,
+        bodyweight,
+        snatch,
+        deadlift,
+        backsq,
+        candj,
 
         -- Relative strength calculations
-        snatch_kg / bodyweight_kg AS snatch_bw,
-        candj_kg / bodyweight_kg AS candj_bw,
-        backsq_kg / bodyweight_kg AS squat_bw,
-        deadlift_kg / bodyweight_kg AS deadlift_bw,
+        snatch / bodyweight AS snatch_bw,
+        candj / bodyweight AS candj_bw,
+        backsq / bodyweight AS squat_bw,
+        deadlift / bodyweight AS deadlift_bw,
 
         -- Strength ratios
-        snatch_kg / candj_kg AS snatch_to_cj_ratio,
-        candj_kg / backsq_kg AS cj_to_squat_ratio,
-        deadlift_kg / backsq_kg AS deadlift_to_squat_ratio,
+        snatch / candj AS snatch_to_cj_ratio,
+        candj / backsq AS cj_to_squat_ratio,
+        deadlift / backsq AS deadlift_to_squat_ratio,
 
         -- Total strength score
-        (snatch_kg + candj_kg + backsq_kg + deadlift_kg) AS total_lift,
+        (snatch + candj + backsq + deadlift) AS total_lift,
 
         -- Composite relative score
-        (snatch_kg + candj_kg + backsq_kg + deadlift_kg) / bodyweight_kg AS strength_score
+        (snatch + candj + backsq + deadlift) / bodyweight AS strength_score
 
     FROM athletes
-    WHERE bodyweight_kg > 0
+    WHERE bodyweight > 0
 ),
 
 classified AS (
     SELECT *,
     
-        -- Strength level classification (based on snatch/bodyweight)
         CASE
             WHEN snatch_bw < 0.75 THEN 'Beginner'
             WHEN snatch_bw BETWEEN 0.75 AND 1.0 THEN 'Intermediate'
@@ -43,7 +44,6 @@ classified AS (
             ELSE 'Elite'
         END AS snatch_level,
 
-        -- Weakness detection
         CASE
             WHEN cj_to_squat_ratio < 0.7 THEN 'Weak Clean & Jerk'
             WHEN snatch_to_cj_ratio < 0.7 THEN 'Weak Snatch Technique'
@@ -56,13 +56,9 @@ classified AS (
 ranked AS (
     SELECT *,
     
-        -- Ranking athletes by overall strength
         RANK() OVER (ORDER BY strength_score DESC) AS overall_rank,
-
-        -- Percentile ranking
         NTILE(100) OVER (ORDER BY strength_score DESC) AS percentile_rank,
 
-        -- Age group classification
         CASE
             WHEN age < 18 THEN 'Youth'
             WHEN age BETWEEN 18 AND 34 THEN 'Senior'
@@ -73,12 +69,11 @@ ranked AS (
     FROM classified
 )
 
--- Final output
 SELECT 
     name,
     age,
     age_group,
-    bodyweight_kg,
+    bodyweight,
 
     ROUND(snatch_bw, 2) AS snatch_bw,
     ROUND(candj_bw, 2) AS candj_bw,
