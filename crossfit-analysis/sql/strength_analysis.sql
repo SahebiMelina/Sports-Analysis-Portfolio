@@ -1,7 +1,8 @@
---Crossfit Strength Analysis
+-- Crossfit Strength Analysis
 
---Crossfit Strength Analysis
+DROP TABLE IF EXISTS athlete_strength_analysis;
 
+CREATE TABLE athlete_strength_analysis AS
 WITH base AS (
     SELECT 
         name,
