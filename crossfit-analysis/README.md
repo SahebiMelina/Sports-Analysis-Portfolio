@@ -1,2 +1,3 @@
 #Firstly gathered data from an open source in kaggle and cleaned it so that we have all the useful information about the athletes rather than unnecessary data !
 #Secondly by using sql techniques , we evaluated athletes’ relative strength, classifies performance levels, and identifies key imbalances across major lifts !
+#Thirdly for doing some interesting analysis by using seaborn , matplotlib , and sql database to figure out if there is any impact on an athlete's Fran time based on his/her age , gender , training experience and etc... we made some datasets using csv file and connected it to sql database ! 
